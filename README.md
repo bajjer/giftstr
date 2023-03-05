@@ -7,11 +7,11 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - [User stories](https://github.com/bajjer/giftstr/blob/main/README.md#user-stories)
 
 ## Why gift cards?
-- **used by a lot of people.** The global gift card market is [projected to reach $2.3 trillion by 2030](https://www.reportlinker.com/p06219503/Global-Gift-Cards-Industry.html)
-- **fast and easy to buy**
-- **give flexibility to the recipient**
+- The global gift card market is [projected to reach $2.3 trillion by 2030](https://www.reportlinker.com/p06219503/Global-Gift-Cards-Industry.html)
+- [62% of 18-34 year olds say they're interested in receiving gift cards through social media or messaging apps](https://www.cardcash.com/gift-card-statistics/)
+- **fast and easy to buy**, fastr and easyr with nostr.
+- **give flexibility to the recipient**, flexr with nostr.
 - **increase the usage of bitcoin** and its lightning network in global commerce
-- make gift card markets **more efficient**
 
 ## User personas
 - Alice: A merchant that wishes to sell gift cards for her store
