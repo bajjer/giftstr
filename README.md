@@ -1,6 +1,10 @@
 # giftstr
 giftstr is work in progress to implement assignment, transfer, and redemption of gift cards by merchants using [nostr](https://github.com/nostr-protocol/nostr).
 
+(Why gift cards?)[https://github.com/bajjer/giftstr#why-gift-cards]
+(User profiles)[https://github.com/bajjer/giftstr#user-profiles]
+(Requirements)[https://github.com/bajjer/giftstr#requirements] 
+
 ## Why gift cards?
 - **used by a lot of people.** The global gift card market is [projected to reach $2.3 trillion by 2030](https://www.reportlinker.com/p06219503/Global-Gift-Cards-Industry.html)
 - **fast and easy to buy**
