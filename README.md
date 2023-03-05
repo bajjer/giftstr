@@ -2,8 +2,9 @@
 giftstr is work in progress to implement assignment, transfer, and redemption of gift cards by merchants using [nostr](https://github.com/nostr-protocol/nostr).
 
 - [Why gift cards?](https://github.com/bajjer/giftstr#why-gift-cards)
-- [User profiles](https://github.com/bajjer/giftstr#user-profiles)
+- [User personas](https://github.com/bajjer/giftstr#user-personas)
 - [Requirements](https://github.com/bajjer/giftstr#requirements)
+- [User stories](https://github.com/bajjer/giftstr/blob/main/README.md#user-stories)
 
 ## Why gift cards?
 - **used by a lot of people.** The global gift card market is [projected to reach $2.3 trillion by 2030](https://www.reportlinker.com/p06219503/Global-Gift-Cards-Industry.html)
@@ -12,7 +13,7 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - **increase the usage of bitcoin** and its lightning network in global commerce
 - make gift card markets **more efficient**
 
-## User profiles
+## User personas
 - Alice: A merchant that wishes to sell gift cards for her store
 - Bob: Direct buyer of a gift card to Alice's store
 - Charlie: Indirect buyer of a gift card to Alice's store
@@ -41,7 +42,7 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - **relist the gift card for sale** instead of redeeming it, **receive payment** and **confirm transfer**, same as Bob would
 - view the history of succesful redemptions, documented failures, and outstanding gift cards Alice has assigned, same as Bob would
 
-## Event sequencing
+## User stories
 ### Bob buys a gift card from Alice
 - assign-00: Alice posts event with a specified amount (e.g., 100 USD, 100 EUR, 1,000,000 sats, 0.01 BTC) and notes Bob as the recipient
 - assign-01: Alice posts event with a specified amount (e.g., 100 USD, 100 EUR, 1,000,000 sats, 0.01 BTC) to offer gift cards for sale
@@ -59,7 +60,7 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - return-03: Bob posts event in response (to return-02) including a lightning invoice for the specified amount of satoshis
 - return-04: Alice pays invoice and posts event in response (to return-03) with preimage of the invoice, which also serves as the revocation of Bob's gift card
 
-### Bob redeems gift card
+### Bob redeems gift card from Alice
 - redeem-01: Bob posts event (in response to assign-05) with redemption request
 - redeem-02: Alice posts event in response (to redeem-01) acknowledging redemption
 - redeem-03: Alice sends DM to Bob with agreed upon redemption mechanism (e.g., gift card code)
@@ -68,7 +69,7 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - redeem-06 (optional): Bob posts event in response (to redeem-05) confirming redemption and revoking complaint
 
 ### Bob sells gift card to Charlie
--  transfer-01: Bob posts event in response to assign-05 or xxx to request permission from Alice to transfer his gift card
+-  transfer-01: Bob posts event in response to assign-05 (or transfer-07) to request permission from Alice to transfer his gift card
 -  transfer-02: Alice posts event in response (to transfer-01) confirming Bob may transfer
 -  transfer-03: Bob posts event referencing assign-05, transfer-02, and any additional terms in free-form
 -  transfer-04: Charlie posts event in response (to transfer-03) requesting to purchase Bob's gift card
