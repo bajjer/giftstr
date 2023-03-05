@@ -8,7 +8,7 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 
 ## Why gift cards?
 - The global gift card market is [projected to reach $2.3 trillion by 2030](https://www.reportlinker.com/p06219503/Global-Gift-Cards-Industry.html)
-- [62% of 18-34 year olds say they're interested in receiving gift cards through social media or messaging apps](https://www.cardcash.com/gift-card-statistics/)
+- [62% of 18-34 year olds interested in gift cards through social media](https://www.cardcash.com/gift-card-statistics/)
 - **fast and easy to buy**, fastr and easyr with nostr.
 - **give flexibility to the recipient**, flexr with nostr.
 - **increase the usage of bitcoin** and its lightning network in global commerce
@@ -17,6 +17,7 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - Alice: A merchant that wishes to sell gift cards for her store
 - Bob: Direct buyer of a gift card to Alice's store
 - Charlie: Indirect buyer of a gift card to Alice's store
+- David: Recipient of a gift card purchased by Charlie
 
 ## Requirements
 ### Alice, the merchant
@@ -55,13 +56,13 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - assign-08 (optional): Bob may post an event in response to assignment (assign-00) confirming receipt
 
 ### Bob returns a gift card to Alice
-- return-01: Bob posts event in response to Alice's confirmation event (assign-05) to request to return gift card
+- return-01: Bob posts event in response to Alice's confirmation event (assign-00 or assign-05 or transfer-07 or gift-01) to request to return gift card
 - return-02: Alice posts event in response to Bob's request (return-01) and requests a lightning invoice with a specified amount of satoshis, disclosing the exchange rate and any fees
 - return-03: Bob posts event in response (to return-02) including a lightning invoice for the specified amount of satoshis
 - return-04: Alice pays invoice and posts event in response (to return-03) with preimage of the invoice, which also serves as the revocation of Bob's gift card
 
 ### Bob redeems gift card from Alice
-- redeem-01: Bob posts event (in response to assign-05) with redemption request
+- redeem-01: Bob posts event (in response to assign-00, assign-05, transfer-07, or gift-01) with redemption request
 - redeem-02: Alice posts event in response (to redeem-01) acknowledging redemption
 - redeem-03: Alice sends DM to Bob with agreed upon redemption mechanism (e.g., gift card code)
 - redeem-04 (optional): Bob posts event in response (to redeem-02) acknowledging redemption
@@ -69,9 +70,9 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - redeem-06 (optional): Bob posts event in response (to redeem-05) confirming redemption and revoking complaint
 
 ### Bob sells gift card to Charlie
--  transfer-01: Bob posts event in response to assign-05 (or transfer-07) to request permission from Alice to transfer his gift card
+-  transfer-01: Bob posts event in response to assign-00 or assign-05 (or transfer-07 or gift-01) to request permission from Alice to transfer his gift card
 -  transfer-02: Alice posts event in response (to transfer-01) confirming Bob may transfer
--  transfer-03: Bob posts event referencing assign-05, transfer-02, and any additional terms in free-form
+-  transfer-03: Bob posts event referencing assign-05 (or assign-00 or transfer-07 or gift-01), transfer-02, and any additional terms in free-form
 -  transfer-04: Charlie posts event in response (to transfer-03) requesting to purchase Bob's gift card
 -  transfer-05: Bob posts event in response (to transfer-04) with a lightning invoice, exchange rate, and any fees
 -  transfer-06: Charlie pays invoice and posts event in response (to transfer-05) with preimage of the invoice
@@ -80,3 +81,7 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 -  transfer-09 (optional): Charlie posts event in response (to transfer-07) documenting lack of acknowledgment
 -  transfer-10 (optional): Charlie posts event in response (to transfer-09) confirming acknowledgment and revoking complaint
 
+### Charlie gifts David with gift card
+- gift-00: Charlie posts event in response to transfer-07 (or assign-00 or assign-05 or gift-01) to assign gift card to David
+- gift-01: Alice posts event in response to gift-00 confirming assignment to David
+- gift-02 (optional): Charlie posts event citing gift-01 to share gift card with David (David will need gift-01 to redeem from Alice)
