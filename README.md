@@ -14,7 +14,7 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - **fast and easy to buy**, fastr and easyr with nostr.
 - **give flexibility to the recipient**, flexr with nostr.
 - **increase the usage of bitcoin** and its lightning network as a medium of exchange
-- **reduce the need intermediaries** for fiat on/off ramps between merchants and consumers
+- **reduce the need for intermediaries** providing fiat on/off ramps between merchants and consumers
 
 ## User personas
 - Alice: A merchant that wishes to sell gift cards for her store
@@ -42,13 +42,13 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - **request to buy** gift card to Alice's store from Bob
 - **send payment** to Bob in exchange for a gift card
 - **receive gift card** from Bob and **confirmation of reassignment** by Alice
-- **redeem, return, confirm succesful, or document failure** of redemption from Alice, same as Bob would
+- **redeem, return, confirm successful, or document failure** of redemption from Alice, same as Bob would
 - **relist the gift card for sale** instead of redeeming it, **receive payment** and **confirm transfer**, same as Bob would
-- view the history of succesful redemptions, documented failures, and outstanding gift cards Alice has assigned, same as Bob would
+- view the history of successful redemptions, documented failures, and outstanding gift cards Alice has assigned, same as Bob would
 
 ### David, the gift card recipient
 - **receive gift card** to Alice's store from Alice, Bob, or Charlie and **confirmation of reassignment** by Alice
-- **redeem, return, confirm succesful, document failure, relist for sale, and view history**, same as Charlie would
+- **redeem, return, confirm successful, document failure, relist for sale, and view history**, same as Charlie would
 
 ## User stories
 ### Bob buys a gift card from Alice
@@ -97,12 +97,23 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 Below are the risks associated with malicious behavior or technical errors (e.g., insufficient propogation by relays), which may lead to unintended financial loss to the different personas.
 
 ### Alice as a trusted third-party
-Alice may refuse to allow redemption of the gift card even if she can identify the rightful owner
+#### Alice may refuse redemption of the gift card even if she can identify the rightful owner
+Gift cards necessarily involve trust in the merchant. This risk is accepted and not net new to nostr as a medium for gift cards.
+
+#### Alice may spoof positive reviews of herself
+Since identity is managed via key pairs, we cannot easily verify that the purchasers and positive reviewers of Alice, contributing to her reputation, are "real" buyers and not impersonations by Alice. Consumers should seek merchants they trust based on their personal risk assesment and the positive reviews they know or trusted by people they know. This risk is accepted and deferred to the implementation of the reputation scoring by individual buyers. This risk is accepted and not net new to nostr as a medium for gift cards.
+
+#### Users other than Alice may spoof negative reviews of Alice
+Since redemption of the gift card to Alice's store involves an "off-band" transaction for a good or service, we cannot easily verify if a complaint raised by a buyer of Alice's gift cards is indeed due to a failed redemption. Merchants and consumers should seek social proof based on their network prior to assigning significant weight to any negative feedback provided to a merchant. This risk is accepted and not net new to nostr as a medium for gift cards.
 
 ### Double-spend attempts
-Alice may attempt to inject events with modified timestamps to spoof the rightful owner of a gift card
+- **Alice:** Alice may attempt to inject events with modified timestamps to spoof the rightful owner of a gift card. This attack is more risky for Alice as observers can note Alice's confirmation notes tied to the same gift card. A malicious merchant would be better served refusing redemptions to obfuscate their malice from other consumers. This risk is deemed low probability and detectable with proper propogation since Alice would have two conflicting confirmation events.
+- **Bob or Charlie or David:** Bob or Charlie or David may attempt to reassign a gift card they have previously sold, transferred, or gifted. Since Alice's confirmation is required after each reassignment, Alice would be able to detect such attempts by keeping track of their assignments.
+- **Bob or Charlie or David in collusion with Alice:** Alice and one of Bob, Charlie, or David may collude to reassign a gift card after it has been sold or transferred to another party. In this instance, the double spend would be succesful but detectable by other observers if the events are adequately propogated.
 
 ### Unpropogated events
+
+
 
 ## Nostrification
 Below are initial hypotheses to reflect the above events as nostr events. Some of the nostr implementation possibilities (NIPs) utilized below may still be in draft form and additional NIPs may be necessary for a more efficient representation of the necessary events.
