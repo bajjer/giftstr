@@ -67,6 +67,9 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - return-02: Alice posts event in response to Bob's request (return-01) and requests a lightning invoice with a specified amount of satoshis, disclosing the exchange rate and any fees
 - return-03: Bob posts event in response (to return-02) including a lightning invoice for the specified amount of satoshis
 - return-04: Alice pays invoice and posts event in response (to return-03) with preimage of the invoice, which also serves as the revocation of Bob's gift card
+- return-05 optional: Bob posts event in response (to return-04) acknowledging refund
+- return-06 optional: Bob posts event in response (to return-04) documenting lack of refund per terms
+- return-07 optional: Bob posts event in response (to return-06) confirming refund and revoking complaint
 
 ### Bob (or Charlie or David) redeems gift card from Alice
 - redeem-01: Bob posts event (in response to assign-00, assign-05, transfer-07, or gift-01) with redemption request
@@ -77,16 +80,16 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - redeem-06 (optional): Bob posts event in response (to redeem-05) confirming redemption and revoking complaint
 
 ### Bob (or Charlie or David) sells gift card to Charlie
--  transfer-01: Bob posts event in response to assign-00 or assign-05 (or transfer-07 or gift-01) to request permission from Alice to transfer his gift card
--  transfer-02: Alice posts event in response (to transfer-01) confirming Bob may transfer
--  transfer-03: Bob posts event referencing assign-05 (or assign-00 or transfer-07 or gift-01), transfer-02, and any additional terms in free-form
--  transfer-04: Charlie posts event in response (to transfer-03) requesting to purchase Bob's gift card
--  transfer-05: Bob posts event in response (to transfer-04) with a lightning invoice, exchange rate, and any fees
--  transfer-06: Charlie pays invoice and posts event in response (to transfer-05) with preimage of the invoice
--  transfer-07: Alice posts event acknowledging Charlie as the new owner of the gift card
--  transfer-08 (optional): Charlie posts event in response (to transfer-07) confirming receipt
--  transfer-09 (optional): Charlie posts event in response (to transfer-07) documenting lack of acknowledgment
--  transfer-10 (optional): Charlie posts event in response (to transfer-09) confirming acknowledgment and revoking complaint
+- transfer-01: Bob posts event in response to assign-00 or assign-05 (or transfer-07 or gift-01) to request permission from Alice to transfer his gift card
+- transfer-02: Alice posts event in response (to transfer-01) confirming Bob may transfer
+- transfer-03: Bob posts event referencing assign-05 (or assign-00 or transfer-07 or gift-01), transfer-02, and any additional terms in free-form
+- transfer-04: Charlie posts event in response (to transfer-03) requesting to purchase Bob's gift card
+- transfer-05: Bob posts event in response (to transfer-04) with a lightning invoice, exchange rate, and any fees
+- transfer-06: Charlie pays invoice and posts event in response (to transfer-05) with preimage of the invoice
+- transfer-07: Alice posts event acknowledging Charlie as the new owner of the gift card
+- transfer-08 (optional): Charlie posts event in response (to transfer-07) confirming receipt
+- transfer-09 (optional): Charlie posts event in response (to transfer-07) documenting lack of acknowledgment
+- transfer-10 (optional): Charlie posts event in response (to transfer-09) confirming acknowledgment and revoking complaint
 
 ### Charlie (or Bob or David) gifts David with gift card
 - gift-00: Charlie posts event in response to transfer-07 (or assign-00 or assign-05 or gift-01) to assign gift card to David
@@ -96,7 +99,7 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 ## What can go wrong?
 Below are the risks associated with malicious behavior or technical errors (e.g., insufficient propogation by relays), which may lead to unintended financial loss to the different personas.
 
-### Alice as a trusted third-party
+### Alice as a trusted party
 #### Alice may refuse redemption of the gift card even if she can identify the rightful owner
 Gift cards necessarily involve trust in the merchant. This risk is accepted and not net new to nostr as a medium for gift cards.
 
@@ -107,14 +110,83 @@ Since identity is managed via key pairs, we cannot easily verify that the purcha
 Since redemption of the gift card to Alice's store involves an "off-band" transaction for a good or service, we cannot easily verify if a complaint raised by a buyer of Alice's gift cards is indeed due to a failed redemption. Merchants and consumers should seek social proof based on their network prior to assigning significant weight to any negative feedback provided to a merchant. This risk is accepted and not net new to nostr as a medium for gift cards.
 
 ### Double-spend attempts
-- **Alice:** Alice may attempt to inject events with modified timestamps to spoof the rightful owner of a gift card. This attack is more risky for Alice as observers can note Alice's confirmation notes tied to the same gift card. A malicious merchant would be better served refusing redemptions to obfuscate their malice from other consumers. This risk is deemed low probability and detectable with proper propogation since Alice would have two conflicting confirmation events.
+- **Alice:** Alice may attempt to inject events with modified timestamps, i.e., `created_at`, to spoof the rightful owner of a gift card. This attack is risky for Alice as observers can note Alice's multiple confirmation notes tied to the same gift card. A malicious merchant would be better served refusing redemptions to obfuscate their malice from other consumers. 
 - **Bob or Charlie or David:** Bob or Charlie or David may attempt to reassign a gift card they have previously sold, transferred, or gifted. Since Alice's confirmation is required after each reassignment, Alice would be able to detect such attempts by keeping track of their assignments.
-- **Bob or Charlie or David in collusion with Alice:** Alice and one of Bob, Charlie, or David may collude to reassign a gift card after it has been sold or transferred to another party. In this instance, the double spend would be succesful but detectable by other observers if the events are adequately propogated.
+- **Bob or Charlie or David in collusion with Alice:** Alice and one of Bob, Charlie, or David may collude to reassign a gift card after it has been sold or transferred to another party. In this instance, the double spend would be succesful but detectable by other observers if the events are adequately propagated. Similar to sole double spending, Alice would be better served refusing redemptions, which cannot be independently observed, whereas double-spend attempts, even if succesful, would be detectable with proper propagation.
+- **A note about timestamping**: [OpenTimestamps](https://opentimestamps.org/) can prove that some information existed prior to the timestamp registered by the system. Including the hash of the most recent Bitcoin block can prove that some information existed later than that block. If both timestamps are used, the information must have existed sometime between the two timestamps and the `created_at` field may be compared to these references to validate its within the right range. However, a malicious user may timestamp an event with both OpenTimestamps and the Bitcoin block hash without publishing it to relays. There is no single global state and relays do not reject events `created_at` an earlier time by default. As such, the best defense against double spends is the fact that they can be detected with properly propogated events and reduced to a problem of trust in the merchant issuing the gift card.  
 
-### Unpropogated events
+### Unpropagated events
+The lack of appropriate propogation for certain events can cause discrepancies in the state observable to the users or independent observers. The below tables describe the risks associated with poor propagation of each of the events identified in the user stories. 
+
+The riskiest of these events (marked with an asterisk (*) in the tables) are as follows:
+- assign-04: Bob pays invoice and posts event in response (to assign-03) with preimage of the invoice
+- assign-05: Alice posts event in response (to assign-04) confirming Bob as owner of a new gift card
+- transfer-06: Charlie pays invoice and posts event in response (to transfer-05) with preimage of the invoice
+- transfer-07: Alice posts event acknowledging Charlie as the new owner of the gift card
+
+In the case of assign-04 and assign-05, Alice may perform an undetected double spend. While she is already a trusted party, the inability of other users to detect her double spends may allow for her to continue with her malicious streak without incurring the requisite reputational loss, particularly if Bob is also unable to propagate assign-06 to penalize Alice.
+
+In the case of transfer-06 and transfer-07, Bob may perform an undetected double spend, which goes undetected by Alice and other users. This can lead to Bob obtaining funds from users other than Charlie.
+
+**TODO:** Are there precautions that can be taken? Can there be a pre-arranged agreement on the relays to use? Would the relays be a federation? Can the federation be replaced in case relays are down? Is there a better mechanism to initiate transfers?
 
 
+#### Assignment
+| Event | Risk from unpropagated event |
+| ----- | ---------------------------- |
+| 00 | Bob loses gift card, no loss to Alice |
+| 01 | No loss to any party |
+| 02 | No loss to any party |
+| 03 | No loss to any party |
+| 04 | * Bob may lose gift card if Alice is malicious, no loss to Alice |
+| 05 | * Bob may lose gift card if Alice is malicious, no loss to Alice |
+| 06 | Bob loses ability to penalize Alice, no loss to Alice |
+| 07 | Alice incurs reputational loss, no loss to Bob |
+| 08 | Alice loses reputational gain, no loss to Bob |
+
+#### Return
+| Event | Risk from unpropagated event |
+| ----- | ---------------------------- |
+| 01 | Bob unwillingly retains gift card, no loss to Alice |
+| 02 | Bob unwillingly retains gift card, no loss to Alice |
+| 03 | Bob unwillingly retains gift card, no loss to Alice |
+| 04 | Alice may incur reputational loss, no loss to Bob |
+| 05 | Alice loses reputational gain, no loss to Bob |
+| 06 | Bob loses ability to penalize Alice, no loss to Alice |
+| 07 | Alice incurs reputational loss, no loss to Bob |
+
+#### Redemption
+| Event | Risk from unpropagated event |
+| ----- | ---------------------------- |
+| 01 | Bob unwillingly retains gift card, no loss to Alice |
+| 02 | Bob unwillingly retains gift card, no loss to Alice |
+| 03 | Bob unwillingly retains gift card, no loss to Alice |
+| 04 | Alice loses reputational gain, no loss to Bob |
+| 05 | Bob loses ability to penalize Alice, no loss to Alice |
+| 06 | Alice incurs reputational loss, no loss to Bob |
+
+#### Transfer
+| Event | Risk from unpropagated event |
+| ----- | ---------------------------- |
+| 01 | Bob unwillingly retains gift card, no loss to Alice (or Charlie) |
+| 02 | Bob unwillingly retains gift card, no loss to Alice (or Charlie) |
+| 03 | Bob unwillingly retains gift card, no loss to Alice (or Charlie) |
+| 04 | Bob unable to sell to Charlie, Charlie unable to buy from Bob, no loss to Alice |
+| 05 | Bob unable to sell to Charlie, Charlie unable to buy from Bob, no loss to Alice |
+| 06 | * Charlie may lose gift card if Bob is malicious, no loss to Alice or Bob |
+| 07 | * Charlie may lose gift card if Bob is malicious, no loss to Alice or Bob |
+| 08 | Alice loses reputational gain, no loss to Bob or Charlie |
+| 09 | Charlie loses ability to penalize Alice, no loss to Alice or Bob |
+| 10 | Alice incurs reputational loss, no loss to Bob or Charlie |
+
+#### Gift
+| Event | Risk from unpropagated event |
+| ----- | ---------------------------- |
+| 00 | Charlie unable to gift David, David unable to receive gift card, no loss to Alice or Bob |
+| 01 | Charlie unable to gift David, David unable to receive gift card, no loss to Alice or Bob |
+| 02 | Charlie unable to gift David, David unable to receive gift card, no loss to Alice or Bob |
 
 ## Nostrification
 Below are initial hypotheses to reflect the above events as nostr events. Some of the nostr implementation possibilities (NIPs) utilized below may still be in draft form and additional NIPs may be necessary for a more efficient representation of the necessary events.
 
+**TODO:** Specify the nostr events that closely resemble the events noted in the user stories.
