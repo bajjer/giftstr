@@ -128,7 +128,7 @@ In the case of assign-04 and assign-05, Alice may perform an undetected double s
 
 In the case of transfer-06 and transfer-07, Bob may perform an undetected double spend, which goes undetected by Alice and other users. This can lead to Bob obtaining funds from users other than Charlie.
 
-**TODO:** Are there precautions that can be taken? Can there be a pre-arranged agreement on the relays to use? Would the relays be a federation? Can the federation be replaced in case relays are down? Is there a better mechanism to initiate transfers? Can a (nostr 2.0)[https://medium.com/@colbyserpa/nostr-2-0-layer-2-off-chain-data-storage-b7d299078c60] type merkle tree scheme help reduce the risk of fraud/double spend?
+**TODO:** Are there precautions that can be taken? Can there be a pre-arranged agreement on the relays to use? Would the relays be a federation? Can the federation be replaced in case relays are down? Is there a better mechanism to initiate transfers? Can a [nostr 2.0](https://medium.com/@colbyserpa/nostr-2-0-layer-2-off-chain-data-storage-b7d299078c60) type merkle tree scheme help reduce the risk of fraud/double spend?
 
 
 #### Assignment
