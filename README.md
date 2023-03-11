@@ -1,5 +1,5 @@
 # giftstr
-giftstr is work in progress to implement assignment, transfer, and redemption of gift cards by merchants using [nostr](https://github.com/nostr-protocol/nostr).
+giftstr is work in progress to implement assignment, transfer, and redemption of gift cards using [nostr](https://github.com/nostr-protocol/nostr).
 
 - [Why gift cards?](https://github.com/bajjer/giftstr#why-gift-cards)
 - [User personas](https://github.com/bajjer/giftstr#user-personas)
@@ -67,9 +67,9 @@ giftstr is work in progress to implement assignment, transfer, and redemption of
 - return-02: Alice posts event in response to Bob's request (return-01) and requests a lightning invoice with a specified amount of satoshis, disclosing the exchange rate and any fees
 - return-03: Bob posts event in response (to return-02) including a lightning invoice for the specified amount of satoshis
 - return-04: Alice pays invoice and posts event in response (to return-03) with preimage of the invoice, which also serves as the revocation of Bob's gift card
-- return-05 optional: Bob posts event in response (to return-04) acknowledging refund
-- return-06 optional: Bob posts event in response (to return-04) documenting lack of refund per terms
-- return-07 optional: Bob posts event in response (to return-06) confirming refund and revoking complaint
+- return-05 (optional): Bob posts event in response (to return-04) acknowledging refund
+- return-06 (optional): Bob posts event in response (to return-04) documenting lack of refund per terms
+- return-07 (optional): Bob posts event in response (to return-06) confirming refund and revoking complaint
 
 ### Bob (or Charlie or David) redeems gift card from Alice
 - redeem-01: Bob posts event (in response to assign-00, assign-05, transfer-07, or gift-01) with redemption request
@@ -128,7 +128,7 @@ In the case of assign-04 and assign-05, Alice may perform an undetected double s
 
 In the case of transfer-06 and transfer-07, Bob may perform an undetected double spend, which goes undetected by Alice and other users. This can lead to Bob obtaining funds from users other than Charlie.
 
-**TODO:** Are there precautions that can be taken? Can there be a pre-arranged agreement on the relays to use? Would the relays be a federation? Can the federation be replaced in case relays are down? Is there a better mechanism to initiate transfers?
+**TODO:** Are there precautions that can be taken? Can there be a pre-arranged agreement on the relays to use? Would the relays be a federation? Can the federation be replaced in case relays are down? Is there a better mechanism to initiate transfers? Can a (nostr 2.0)[https://medium.com/@colbyserpa/nostr-2-0-layer-2-off-chain-data-storage-b7d299078c60] type merkle tree scheme help reduce the risk of fraud/double spend?
 
 
 #### Assignment
@@ -189,4 +189,4 @@ In the case of transfer-06 and transfer-07, Bob may perform an undetected double
 ## Nostrification
 Below are initial hypotheses to reflect the above events as nostr events. Some of the nostr implementation possibilities (NIPs) utilized below may still be in draft form and additional NIPs may be necessary for a more efficient representation of the necessary events.
 
-**TODO:** Specify the nostr events that closely resemble the events noted in the user stories.
+**TODO:** Specify the nostr events that closely resemble the events noted in the user stories. Try to use NIP-57 for payments and NIP-58 badges to represent gift cards.
