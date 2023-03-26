@@ -191,7 +191,7 @@ In the case of transfer-06 and transfer-07, Bob may perform an undetected double
 ## Nostrification
 Below is a set of nostr events that can represent the above events using the current set of NIPs. Some of the nostr implementation possibilities (NIPs) utilized below may still be in draft form and additional NIPs may be necessary for a more efficient representation of the necessary events.
 
-**TODO:*** There may be an improvement to the below to pre-select relays to publish events. 
+**TODO:** There may be an improvement to the below to pre-select relays to publish events. 
 
 | giftsr event | nostr event |
 ------------------------------
