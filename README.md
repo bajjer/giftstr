@@ -194,7 +194,7 @@ Below is a set of nostr events that can represent the above events using the cur
 **TODO:** There may be an improvement to the below to pre-select relays to publish events. 
 
 | giftsr event | nostr event |
-------------------------------
+---------------|--------------
 | assign-00 | Alice creates event with kind 30009, awards it to Bob with event kind 8 |
 | assign-01 | Alice creates event with kind 30008, posts a sale notice with event kind 1 |
 | assign-08 | Bob creates event with kind 30008 |
