@@ -189,6 +189,13 @@ In the case of transfer-06 and transfer-07, Bob may perform an undetected double
 | 02 | Charlie unable to gift David, David unable to receive gift card, no loss to Alice or Bob |
 
 ## Nostrification
-Below are initial hypotheses to reflect the above events as nostr events. Some of the nostr implementation possibilities (NIPs) utilized below may still be in draft form and additional NIPs may be necessary for a more efficient representation of the necessary events.
+Below is a set of nostr events that can represent the above events using the current set of NIPs. Some of the nostr implementation possibilities (NIPs) utilized below may still be in draft form and additional NIPs may be necessary for a more efficient representation of the necessary events.
 
-**TODO:** Specify the nostr events that closely resemble the events noted in the user stories. Try to use NIP-57 for payments and NIP-58 badges to represent gift cards.
+**TODO:*** There may be an improvement to the below to pre-select relays to publish events. 
+
+| giftsr event | nostr event |
+------------------------------
+| assign-00 | Alice creates event with kind 30009, awards it to Bob with event kind 8 |
+| assign-01 | Alice creates event with kind 30008, posts a sale notice with event kind 1 |
+| assign-08 | Bob creates event with kind 30008 |
+
