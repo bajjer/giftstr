@@ -191,11 +191,17 @@ In the case of transfer-06 and transfer-07, Bob may perform an undetected double
 ## Nostrification
 Below is a set of nostr events that can represent the above events using the current set of NIPs. Some of the nostr implementation possibilities (NIPs) utilized below may still be in draft form and additional NIPs may be necessary for a more efficient representation of the necessary events.
 
-**TODO:** There may be an improvement to the below to pre-select relays to publish events. 
+**TODO:** There may be an improvement to the below to pre-select relays to publish events. Each gift card should be a unique 30009 event that can serve to provide additional verification.
 
 | giftsr event | nostr event |
 ---------------|--------------
 | assign-00 | Alice creates event with kind 30009, awards it to Bob with event kind 8 |
-| assign-01 | Alice creates event with kind 30008, posts a sale notice with event kind 1 |
-| assign-08 | Bob creates event with kind 30008 |
+| assign-01 | Alice posts a sale notice with event kind 1 and needs a lightning address with a wallet that supports NIP-57 |
+| assign-02 | Bob posts event kind 1 note request OR Bob zaps appropriate amount to assign-01 (need to spec agreement on amount) |
+| assign-03 | Alice posts event kind 1 note response to request OR not needed if zapped |
+| assign-04 | Bob posts zap (9734 and 9735) per Alice's specifications |
+| assign-05 | same as assign-00 |
+| assign-06 | todo |
+| assign-07 | todo |
+| assign-08 | Bob creates event with kind 30008, accepting new badge awarded with assign-00 |
 
