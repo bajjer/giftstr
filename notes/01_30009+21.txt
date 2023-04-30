@@ -9,8 +9,8 @@ nostril --envelope --sec 0cece4923bdde914cba502b9d58e11fe59997f8bf3ba246f83ea02c
 						["d","cake-card"],
 						["name","21 USD Cake Card"],
 						["description","Good for 21 USD of cake at btc++"],
-						["image","https://btcplusplus.dev/static/img/btcpp.svg", "1024x1024"],
-						["thumb","https://btcplusplus.dev/static/img/btcpp.svg", "256x256"]],
+						["image","https://btcplusplus.dev/static/img/btcpp.svg","1024x1024"],
+						["thumb","https://btcplusplus.dev/static/img/btcpp.svg","256x256"]],
 	"sig": "1fa03cd1d09b2030aa8820b3f87f873f21f636bd8cfc6d4505735da3e1e37f756a007e4c303b69d42ffc0a4317d973117340d4763705db982b38fc93af813f47"}]
 
 
