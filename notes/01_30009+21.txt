@@ -1,1 +1,1 @@
-
+nostril --envelope --sec 0cece4923bdde914cba502b9d58e11fe59997f8bf3ba246f83ea02cea94fe207 --kind 30009 --tag d "cake-card" --tag name "21 USD Cake Card" --tag description "Good for 21 USD of cake at btc++" --tag image "https://btcplusplus.dev/static/img/btcpp.svg" --tag thumb "https://btcplusplus.dev/static/img/btcpp.svg"
